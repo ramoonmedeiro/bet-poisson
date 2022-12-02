@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Lendo arquivo excel
-df = pd.read_excel('../datasets/info_futebol.xlsx', sheet_name='info_geral', index_col='Time')
+df = pd.read_excel('/datasets/info_futebol.xlsx', sheet_name='info_geral', index_col='Time')
 
 # Criando coluna de força de times
 a, b = df['Pontuacao'].min(), df['Pontuacao'].max()
@@ -35,7 +35,7 @@ if rad == 'BET Jogos':
 	times2.remove(time1)
 	time2 = visitante.selectbox('Time Visitante', times2)
 	prob, matrix = tools.probabilidades_partidas(df, time1, time2)
-
+	st.markdown('----------')
 
 	col1, col2, col3, col4, col5 = st.columns(5)
 	col1.image(df.loc[time1, 'imagem'])  
