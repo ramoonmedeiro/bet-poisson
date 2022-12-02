@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import poisson
 
-def lambda_(team1, team2):
+def lambda_(df, team1, team2):
 
     forca1 = df.loc[team1]['forca']
     forca2 = df.loc[team2]['forca']
@@ -10,7 +10,7 @@ def lambda_(team1, team2):
     lambda1 = m*forca1/(forca2 + forca1)
     lambda2 = m - lambda1
 
-    return [lam1, lam2]
+    return [lambda1, lambda2]
 
 def resultado_vde(gols1, gols2):
 
@@ -43,9 +43,9 @@ def dist_poisson(media):
     return pd.Series(probs, index = ['0', '1', '2', '3', '4', '5', '6+'])
 
 
-def probabilidades_partidas(team1, team2):
+def probabilidades_partidas(df, team1, team2):
 
-    lambda1, lambda2 = medias_forca(team1, team2)
+    lambda1, lambda2 = lambda_(df, team1, team2)
     dist1, dist2 = dist_poisson(lambda1), dist_poisson(lambda2)
     matriz_resultados = np.outer(dist1, dist2) # outer produto dos valores de dist1 e dist2
 
