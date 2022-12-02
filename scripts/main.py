@@ -10,32 +10,46 @@ import seaborn as sns
 df = pd.read_excel('../datasets/info_futebol.xlsx', sheet_name='info_geral', index_col='Time')
 
 # Criando coluna de força de times
-a, b = df['Pontuação'].min(), df['Pontuação'].max()
-fa, fb = 0.3, 1 # novos limites
+a, b = df['Pontuacao'].min(), df['Pontuacao'].max()
+fa, fb = 0.15, 1 # novos limites
 b1 = (fb - fa)/(b-a)
 b0 = fb - b*b1
-df['forca'] = round(b0 + b1*df['Pontuação'], 3)
-
-
-prob, matrix = tools.probabilidades_partidas(df, 'São Paulo', 'Ferroviária')
+df['forca'] = round(b0 + b1*df['Pontuacao'], 3)
 
 # Streamlit Step
 
-st.markdown(""" ##  :soccer: BET-POISSON """)
-st.write('Simulando jogos com base na distribuição de Poisson.')
+rad = st.sidebar.radio('Navegue pelos itens', ['Home', 'Sobre', 'BET Jogos', 'BET Campeonato'])
 
-if st.button('Aperte aqui'):
-	st.write('Valeu')
+if rad == 'Home':
+	st.markdown(""" ##  :soccer: BET-POISSON """)
+	st.write('Simulando jogos com base na distribuição de Poisson.')
 
-name = st.text_input('Nome')
-st.write(name)
+if rad == 'Sobre':
+	st.write('Em construção')
 
-time1 = st.selectbox('Time 1', ['São Paulo', 'Palmeiras', 'Santos'])
-time2 = st.selectbox('Time 2', ['São Paulo', 'Palmeiras', 'Santos'])
-#add = st.text_area('Endereço')
-#st.dataframe(matrix)
-#st.table(matrix)
+if rad == 'BET Jogos':
+	times1 = list(df.index)
+	times2 = times1.copy()
+	casa, visitante = st.columns(2)
+	time1 = casa.selectbox('Time Casa', times1)
+	times2.remove(time1)
+	time2 = visitante.selectbox('Time Visitante', times2)
+	prob, matrix = tools.probabilidades_partidas(df, time1, time2)
 
-#fig, ax = plt.subplots(figsize=(10, 5))
-#sns.heatmap(matrix, vmax = 19 , annot=True, linewidth = .5, fmt=".1f")
-#st.pyplot(fig)
+
+	col1, col2, col3, col4, col5 = st.columns(5)
+	col1.image(df.loc[time1, 'imagem'])  
+	col2.metric(time1, prob[0])
+	col3.metric('Empate', prob[1])
+	col4.metric(time2, prob[2]) 
+	col5.image(df.loc[time2, 'imagem'])
+
+	if st.button('Mostrar mapa de calor dos placares'):
+		fig, ax = plt.subplots(figsize=(10, 5))
+		sns.heatmap(matrix, vmax = 19 , annot=True, linewidth = .5, fmt=".1f")
+		plt.xlabel(f'{time2}', fontsize=13)
+		plt.ylabel(f'{time1}', fontsize=13)
+		st.pyplot(fig)
+
+if rad == 'BET Campeonato':
+	st.write('Em construção')
