@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Lendo arquivo excel
-df = pd.read_excel('/datasets/info_futebol.xlsx', sheet_name='info_geral', index_col='Time')
+df = pd.read_excel('./../datasets/info_futebol.xlsx', sheet_name='info_geral', index_col='Time')
 
 # Criando coluna de força de times
 a, b = df['Pontuacao'].min(), df['Pontuacao'].max()
