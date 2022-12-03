@@ -22,7 +22,8 @@ rad = st.sidebar.radio('Navegue pelos itens', ['Home', 'Sobre', 'BET Jogos', 'BE
 
 if rad == 'Home':
 	st.markdown(""" ##  :soccer: BET-POISSON """)
-	st.write('Simulando jogos com base na distribuição de Poisson.')
+	st.markdown(""" ### Simulando jogos com base na distribuição de Poisson.""")
+	st.write('Este projeto ainda está em construção e em contante mudança. Navegue pelos itens oferecidos na barra ao lado.')
 
 if rad == 'Sobre':
 	st.write('Em construção')
