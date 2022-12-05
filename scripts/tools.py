@@ -2,15 +2,25 @@ import numpy as np
 import pandas as pd
 from scipy.stats import poisson
 
-def lambda_(df, team1, team2):
 
-    forca1 = df.loc[team1]['forca']
+def lambda_(df, team1, team2):
+    
+    #forca1 = df.loc[team1]['forca']
+    #forca2 = df.loc[team2]['forca']
+    forca1 = df.loc[team1]['forca'] 
     forca2 = df.loc[team2]['forca']
+    
+    if forca1 >= 0.8:
+        forca1 = forca1
+    else:
+        forca1 += 0.15*forca1
+    #forca1 += 0.20
     m = 2.25
     lambda1 = m*forca1/(forca2 + forca1)
     lambda2 = m - lambda1
 
     return [lambda1, lambda2]
+
 
 def resultado_vde(gols1, gols2):
 
@@ -62,16 +72,3 @@ def probabilidades_partidas(df, team1, team2):
     probabilidades = [f'{100*i:.2f}%' for i in vde]
 
     return probabilidades, 100*matriz_resultados
-
-
-def simula_jogo(team1, team2):
-
-    lambda1, lambda2 = lambda_(team1, team2)
-    gols1 = int(np.random.poisson(lam=lambda1, size=1))
-    gols2 = int(np.random.poisson(lam=lambda2, size=1))
-    saldo1 = gols1 - gols2
-    saldo2 = gols2 - gols1
-    pts1, pts2, resultado = pontos_time(gols1, gols2)
-    placar = f'{gols1} X {gols2}'
-
-    return [gols1, gols2, saldo1, saldo2, pts1, pts2, resultado, placar]
